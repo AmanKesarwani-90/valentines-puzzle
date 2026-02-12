@@ -44,13 +44,7 @@ function shuffle() {
 
 function swapTiles(index1, index2) {
     [tiles[index1], tiles[index2]] = [tiles[index2], tiles[index1]];
-
-    if (index1 === emptyIndex) {
-        emptyIndex = index2;
-    } else if (index2 === emptyIndex) {
-        emptyIndex = index1;
-    }
-
+    emptyIndex = (index1 === emptyIndex) ? index2 : index1;
     renderPuzzle();
 }
 
@@ -65,21 +59,16 @@ function moveTile(clickedIndex) {
     const emptyRow = Math.floor(emptyIndex / size);
     const emptyCol = emptyIndex % size;
 
-    const isAdjacent =
-        (Math.abs(clickedRow - emptyRow) === 1 && clickedCol === emptyCol) ||
-        (Math.abs(clickedCol - emptyCol) === 1 && clickedRow === emptyRow);
+    const isAdjacent = (Math.abs(clickedRow - emptyRow) === 1 && clickedCol === emptyCol) ||
+                       (Math.abs(clickedCol - emptyCol) === 1 && clickedRow === emptyRow);
 
     if (!isAdjacent) return;
-
     swapTiles(clickedIndex, emptyIndex);
     checkSolved();
 }
 
 function checkSolved() {
-    const solved = tiles.every(
-        (tile, i) => parseInt(tile.dataset.correct) === i
-    );
-
+    const solved = tiles.every((tile, i) => parseInt(tile.dataset.correct) === i);
     if (solved) {
         tiles[emptyIndex].classList.remove("hidden");
         document.getElementById("message").style.opacity = 1;
@@ -87,25 +76,62 @@ function checkSolved() {
     }
 }
 
-document.getElementById("yes").onclick = () => {
-    alert("YAY 💖💖💖");
+// ACTION BUTTONS
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+let scale = 1;
+
+yesBtn.onclick = () => {
+    // This replaces the puzzle with your romantic message
+    document.querySelector('.container').innerHTML = `
+        <div style="animation: fadeIn 2s ease-in-out; padding: 10px;">
+            <p style="font-size: 1.25em; line-height: 1.6; color: #444; font-style: italic; margin-bottom: 20px;">
+                "In every version of my life, <br> 
+                I would always find my way to you."
+            </p>
+            <h2 style="color: #ff5c8d; font-size: 1.6em; margin-bottom: 20px; font-weight: bold;">
+                Happy Valentine’s Day, my love❤️
+            </h2>
+            <img src="image.jpg" style="width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(255,105,180,0.3);">
+        </div>
+    `;
+
+    // Starts the floating hearts celebration
+    setInterval(createHeart, 300);
 };
 
-document.getElementById("no").onclick = () => {
-    alert("That option is currently unavailable 😌");
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    // Mix of different heart colors for variety
+    const colors = ["💖", "💗", "💓", "❤️"];
+    heart.innerHTML = colors[Math.floor(Math.random() * colors.length)];
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+    document.body.appendChild(heart);
+    setTimeout(() => { heart.remove(); }, 5000);
+}
+
+// This function moves the "No" button and grows the "Yes" button
+const escape = (e) => {
+    // Prevent zooming/default behavior on phones
+    if(e.type === "touchstart") e.preventDefault(); 
+    
+    const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+    const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = Math.floor(Math.random() * maxX) + "px";
+    noBtn.style.top = Math.floor(Math.random() * maxY) + "px";
+
+    // Make "Yes" bigger every time they try to hit "No"
+    scale += 0.15;
+    yesBtn.style.transform = `scale(${scale})`;
 };
 
-document.getElementById("no").addEventListener("mouseenter", function() {
-    const maxX = window.innerWidth - this.offsetWidth - 20;
-    const maxY = window.innerHeight - this.offsetHeight - 20;
-
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
-
-    this.style.position = "fixed";
-    this.style.left = randomX + "px";
-    this.style.top = randomY + "px";
-});
+// Works for PC (mouseover) and Phones (touchstart)
+noBtn.addEventListener("mouseover", escape);
+noBtn.addEventListener("touchstart", escape);
 
 createTiles();
 shuffle();
