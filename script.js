@@ -90,7 +90,7 @@ yesBtn.onclick = () => {
                 I would always find my way to you."
             </p>
             <h2 style="color: #ff5c8d; font-size: 1.6em; margin-bottom: 20px; font-weight: bold;">
-                Happy Valentine’s Day, my love❤️
+                Happy Valentine’s Day, love❤️
             </h2>
             <img src="image.jpg" style="width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(255,105,180,0.3);">
         </div>
