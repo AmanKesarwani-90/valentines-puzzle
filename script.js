@@ -82,34 +82,64 @@ const noBtn = document.getElementById("no");
 let scale = 1;
 
 yesBtn.onclick = () => {
-    // This replaces the puzzle with your romantic message
+    // Clear the container and show the centered message box with your lines
     document.querySelector('.container').innerHTML = `
-        <div style="animation: fadeIn 2s ease-in-out; padding: 10px;">
-            <p style="font-size: 1.25em; line-height: 1.6; color: #444; font-style: italic; margin-bottom: 20px;">
-                "In every version of my life, <br> 
+        <div style="
+            background: rgba(255, 255, 255, 0.98); 
+            padding: 50px 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 45px rgba(0,0,0,0.15); 
+            z-index: 10; 
+            position: relative;
+            max-width: 90%;
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;">
+            
+            <p style="font-family: 'Georgia', serif; font-size: 1.3em; color: #444; font-style: italic; line-height: 1.6; margin-bottom: 25px;">
+                "In every version of my life, <br>
                 I would always find my way to you."
             </p>
-            <h2 style="color: #ff5c8d; font-size: 1.6em; margin-bottom: 20px; font-weight: bold;">
-                Happy Valentine’s Day, love❤️
-            </h2>
-            <img src="image.jpg" style="width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(255,105,180,0.3);">
+
+            <div style="width: 50px; height: 2px; background: #ff5c8d; margin: 0 auto 25px auto; opacity: 0.5;"></div>
+
+            <h1 style="color: #ff5c8d; font-family: 'Helvetica', sans-serif; font-size: 1.8em; margin: 0; font-weight: bold; letter-spacing: 1px;">
+                Happy Valentine’s Eve, love.
+            </h1>
         </div>
     `;
 
-    // Starts the floating hearts celebration
-    setInterval(createHeart, 300);
+    // Start the heavy heart rain
+    setInterval(createHeart, 150);
 };
 
 function createHeart() {
     const heart = document.createElement("div");
-    heart.classList.add("heart");
-    // Mix of different heart colors for variety
-    const colors = ["💖", "💗", "💓", "❤️"];
-    heart.innerHTML = colors[Math.floor(Math.random() * colors.length)];
+    heart.innerHTML = "❤️";
+    heart.style.position = "fixed";
+    heart.style.top = "-60px"; 
     heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+    
+    // Keeping them BIG as requested
+    heart.style.fontSize = (Math.random() * 30 + 35) + "px"; 
+    
+    heart.style.color = "#ff5c8d";
+    heart.style.userSelect = "none";
+    heart.style.pointerEvents = "none";
+    heart.style.zIndex = "1"; 
+    
+    const duration = Math.random() * 3 + 2.5; 
+    heart.style.transition = `transform ${duration}s linear, opacity ${duration}s ease-in`;
+    
     document.body.appendChild(heart);
-    setTimeout(() => { heart.remove(); }, 5000);
+
+    setTimeout(() => {
+        heart.style.transform = `translateY(115vh) rotate(${Math.random() * 360}deg)`;
+        heart.style.opacity = "0";
+    }, 100);
+
+    setTimeout(() => {
+        heart.remove();
+    }, duration * 1000);
 }
 
 // This function moves the "No" button and grows the "Yes" button
