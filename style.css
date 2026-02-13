@@ -29,7 +29,7 @@ body {
 .tile {
     width: 150px;
     height: 150px;
-    background-image: url("image.png");
+    background-image: url("us.jpeg");
     background-size: 450px 450px;
     cursor: pointer;
     border-radius: 6px;
